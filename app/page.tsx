@@ -1,6 +1,7 @@
 'use client';
 
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 const PHONE = "8264620991";
 const PHONE_DISPLAY = "82646-20991";
@@ -11,243 +12,318 @@ const MAPS = `https://www.google.com/maps/search/?api=1&query=${encodeURICompone
 const img = (id: string, w = 800) =>
   `https://images.unsplash.com/${id}?q=80&w=${w}&auto=format&fit=crop`;
 
-const HERO_IMG = img("photo-1507679799987-c73779587ccf", 900);
-const HERO_SIDE = img("photo-1594938298603-c8148c4dae35", 600);
-const CRAFT_IMG = img("photo-1584992236310-6edddc08acff", 900);
-const FABRIC_IMG = img("photo-1620799140408-edc6dcb6d633", 900);
+const P = {
+  suitMain: img("photo-1507679799987-c73779587ccf", 900),
+  suit2: img("photo-1594938298603-c8148c4dae35", 700),
+  blazer: img("photo-1593030761757-71fae45fa0e7", 700),
+  groom: img("photo-1603252109303-2751441dd157", 800),
+  businessman: img("photo-1519085360753-af0119f7cbe7", 700),
+  fashionMan: img("photo-1552374196-c4e7ffc6e126", 700),
+  indianMen: img("photo-1602810318383-e386cc2a3ccf", 700),
+  shirtsHang: img("photo-1620012253295-c15cc3e65df4", 700),
+  whiteShirt: img("photo-1596755094514-f87e34085b2c", 700),
+  rack: img("photo-1434389677669-e08b4cac3105", 700),
+  store: img("photo-1441986300917-64674bd600d8", 700),
+  rack2: img("photo-1544441893-675973e31985", 700),
+  sewing: img("photo-1584992236310-6edddc08acff", 800),
+  fabricWhite: img("photo-1620799140408-edc6dcb6d633", 700),
+  fabricColor: img("photo-1528459801416-a9e53bbf4e17", 700),
+  fashion: img("photo-1558769132-cb1aea458c5e", 700),
+  tshirt: img("photo-1521572163474-6864f9cf17ab", 700),
+  wedding: img("photo-1543076447-215ad9ba6923", 800),
+  face1: img("photo-1507003211169-0a1dd7228f2d", 200),
+  face2: img("photo-1500648767791-00dcc994a43e", 200),
+  face3: img("photo-1494790108377-be9c29b29330", 200),
+};
 
-const services = [
-  {
-    title: "Suits & Blazers",
-    desc: "Sharp 2-pc / 3-pc suits, wedding & office blazers with perfect shoulder fitting.",
-    price: "from ₹2,499 stitching",
-    image: img("photo-1594938298603-c8148c4dae35"),
-  },
-  {
-    title: "Sherwani & Indo-Western",
-    desc: "Royal wedding sherwanis, Jodhpuri & Indo-western — traditional grace, modern finish.",
-    price: "from ₹3,499 stitching",
-    image: img("photo-1610030469983-98e550d6193c"),
-  },
-  {
-    title: "Kurta Pajama & Pathani",
-    desc: "Everyday to festive kurtas, Pathani suits in all fabrics — comfort fit.",
-    price: "from ₹499 stitching",
-    image: img("photo-1602810318383-e386cc2a3ccf"),
-  },
-  {
-    title: "Shirt & Pant",
-    desc: "Formal & casual shirts, trousers with clean stitching and correct length.",
-    price: "from ₹349 stitching",
-    image: img("photo-1596755094514-f87e34085b2c"),
-  },
-  {
-    title: "Fabrics & Custom Style",
-    desc: "Slim modern or classic traditional — bring any fabric, we handle all.",
-    price: "all fabrics handled",
-    image: img("photo-1620799140408-edc6dcb6d633"),
-  },
-  {
-    title: "Alteration & Repair",
-    desc: "Fitting correction, tapering, length, zip & urgent same-day alterations.",
-    price: "same-day available",
-    image: img("photo-1584992236310-6edddc08acff"),
-  },
-];
-
-const gallery = [
-  { src: img("photo-1507679799987-c73779587ccf", 600), label: "Wedding Suit" },
-  { src: img("photo-1594938298603-c8148c4dae35", 600), label: "Classic Blazer" },
-  { src: img("photo-1593030761757-71fae45fa0e7", 600), label: "Premium Finish" },
-  { src: img("photo-1602810318383-e386cc2a3ccf", 600), label: "Kurta Style" },
-  { src: img("photo-1434389677669-e08b4cac3105", 600), label: "Shirts Collection" },
-  { src: img("photo-1441986300917-64674bd600d8", 600), label: "Fabric & Fit" },
-];
-
-const whyUs = [
-  { icon: "🛵", title: "On-Door Service", desc: "From measurement to delivery — everything at your doorstep." },
-  { icon: "🧥", title: "Modern & Traditional", desc: "Slim party-wear to classic comfort — both styles available." },
-  { icon: "✅", title: "Perfect Fit, On-Time", desc: "Guaranteed fitting. Reasonable rates, trusted quality." },
-];
-
-const steps = [
-  { n: "01", t: "Call / WhatsApp", d: `Call ${PHONE_DISPLAY} to book your stitching.` },
-  { n: "02", t: "Home Measurement", d: "We visit home, take measurements & discuss style." },
-  { n: "03", t: "Expert Stitching", d: "Master cutting, stitching, finishing & pressing." },
-  { n: "04", t: "Doorstep Delivery", d: "On-time delivery + free fitting check." },
-];
+function useReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll(".reveal,.reveal-left,.reveal-right,.reveal-zoom");
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("visible");
+            io.unobserve(e.target);
+          }
+        }),
+      { threshold: 0.12 }
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+}
 
 function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 24);
+    fn();
+    window.addEventListener("scroll", fn, { passive: true });
+    return () => window.removeEventListener("scroll", fn);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 border-b border-amber-200/40 bg-[#0c0c0e]/95 text-white backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        <a href="#home" className="flex items-center gap-2">
-          <span className="relative h-10 w-10 overflow-hidden rounded-full gold-gradient-bg">
-            <Image src={HERO_SIDE} alt="Khan Tailor" fill className="object-cover" />
-          </span>
-          <span className="leading-tight">
-            <span className="font-display block text-xl tracking-wide gold-gradient-text font-bold">
-              Khan Tailor
-            </span>
-            <span className="block text-[11px] uppercase tracking-[0.2em] text-amber-200/80">
-              Style • Comfort • Perfection
-            </span>
-          </span>
-        </a>
-        <nav className="hidden items-center gap-6 text-sm text-neutral-300 md:flex">
-          <a href="#services" className="hover:text-amber-300">Services</a>
-          <a href="#gallery" className="hover:text-amber-300">Gallery</a>
-          <a href="#why" className="hover:text-amber-300">Why Us</a>
-          <a href="#contact" className="hover:text-amber-300">Contact</a>
-        </nav>
-        <a
-          href={`tel:+91${PHONE}`}
-          className="gold-gradient-bg rounded-full px-4 py-2 text-sm font-semibold text-black shadow hover:brightness-110"
-        >
-          📞 {PHONE_DISPLAY}
-        </a>
+    <>
+      <div className="gold-bg px-4 py-1.5 text-center text-[11px] font-bold uppercase tracking-[0.18em] text-white md:text-xs">
+        ✓ Made-to-Measure &nbsp;&nbsp; ✓ 10,000+ Happy Customers &nbsp;&nbsp; ✓ Free Fitting Fix &nbsp;&nbsp; ✓ On-Door Service
       </div>
-    </header>
+      <header
+        className={`fixed inset-x-0 top-[28px] z-50 transition-all duration-500 md:top-[30px] ${
+          scrolled ? "glass shadow-lg shadow-amber-900/5" : "bg-transparent"
+        }`}
+      >
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+          <a href="#home" className="flex items-center gap-2.5">
+            <span className="relative h-11 w-11 overflow-hidden rounded-full ring-2 ring-amber-500/60 shadow">
+              <Image src={P.suit2} alt="Khan Tailor" fill className="object-cover" />
+            </span>
+            <span className="leading-tight">
+              <span className="font-display block text-xl font-bold tracking-wide text-stone-900">
+                Khan <span className="gold-text">Tailor</span>
+              </span>
+              <span className="block text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-700">
+                Style • Comfort • Perfection
+              </span>
+            </span>
+          </a>
+          <nav className="hidden items-center gap-7 text-sm font-medium text-stone-600 lg:flex">
+            <a href="#collection" className="transition hover:text-amber-700">Collection</a>
+            <a href="#services" className="transition hover:text-amber-700">Services</a>
+            <a href="#gallery" className="transition hover:text-amber-700">Gallery</a>
+            <a href="#process" className="transition hover:text-amber-700">Process</a>
+            <a href="#contact" className="transition hover:text-amber-700">Contact</a>
+          </nav>
+          <div className="flex items-center gap-2">
+            <a
+              href={WHATSAPP}
+              target="_blank"
+              className="hidden rounded-full border border-stone-300 bg-white/70 px-4 py-2 text-sm font-semibold text-stone-700 backdrop-blur transition hover:border-amber-500 sm:block"
+            >
+              WhatsApp
+            </a>
+            <a
+              href={`tel:+91${PHONE}`}
+              className="gold-bg rounded-full px-4 py-2 text-sm font-bold text-white shadow-lg shadow-amber-500/30 transition hover:brightness-110"
+            >
+              📞 {PHONE_DISPLAY}
+            </a>
+          </div>
+        </div>
+      </header>
+    </>
   );
 }
 
 function Hero() {
   return (
-    <section id="home" className="hero-pattern relative overflow-hidden bg-[#0c0c0e] text-white">
-      <div className="pointer-events-none absolute -top-24 right-0 h-96 w-96 rounded-full bg-amber-500/15 blur-3xl" />
-      <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-14 pt-12 md:grid-cols-2 md:pt-20">
+    <section id="home" className="dot-pattern relative overflow-hidden pt-[130px] md:pt-[140px]">
+      <div className="animate-blob pointer-events-none absolute -left-24 top-20 h-96 w-96 rounded-full bg-amber-200/50 blur-3xl" />
+      <div className="animate-blob pointer-events-none absolute -right-24 top-64 h-[28rem] w-[28rem] rounded-full bg-orange-100 blur-3xl" style={{ animationDelay: "-6s" }} />
+
+      <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-4 pb-12 md:grid-cols-2 md:pb-20">
         <div>
-          <span className="inline-flex items-center gap-2 rounded-full border border-amber-400/40 bg-amber-400/10 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-amber-300">
-            ✂️ Amritsar • On-door tailor service
+          <span className="hero-anim hero-anim-1 glass inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-amber-800 shadow-sm">
+            <span className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
+            Amritsar • On-door tailoring
           </span>
-          <h1 className="font-display mt-5 text-4xl leading-tight font-bold md:text-6xl">
-            Look Sharp.
+          <h1 className="hero-anim hero-anim-2 font-display mt-5 text-5xl font-bold leading-[1.05] text-stone-900 md:text-6xl">
+            Tailored to
             <br />
-            <span className="gold-gradient-text">Feel Perfect.</span>
+            <span className="gold-text">Perfection,</span>
+            <br />
+            Made for You.
           </h1>
-          <p className="mt-4 max-w-md text-neutral-300">
-            Khan Tailor — modern & traditional stitching for Suits, Sherwani,
-            Kurta-Pajama, Shirt-Pant. Measurement to delivery,{" "}
-            <span className="text-amber-300 font-semibold">everything at your doorstep.</span>
+          <p className="hero-anim hero-anim-3 mt-5 max-w-md text-[15px] leading-relaxed text-stone-600">
+            Bespoke Suits, Wedding Sherwanis, Kurta-Pajama & Shirts — crafted with premium
+            fabrics and precise measurements. From measurement to delivery,{" "}
+            <b className="text-stone-900">everything at your doorstep.</b>
           </p>
-          <div className="mt-7 flex flex-wrap gap-3">
+          <div className="hero-anim hero-anim-4 mt-7 flex flex-wrap gap-3">
+            <a
+              href="#collection"
+              className="gold-bg rounded-full px-7 py-3.5 font-bold text-white shadow-xl shadow-amber-500/30 transition hover:-translate-y-0.5 hover:shadow-2xl"
+            >
+              Explore Collection →
+            </a>
             <a
               href={`tel:+91${PHONE}`}
-              className="gold-gradient-bg rounded-full px-6 py-3 font-semibold text-black shadow-lg shadow-amber-500/20 hover:brightness-110"
+              className="glass rounded-full px-7 py-3.5 font-bold text-stone-800 shadow transition hover:-translate-y-0.5"
             >
-              Call Now — {PHONE_DISPLAY}
-            </a>
-            <a
-              href={WHATSAPP}
-              target="_blank"
-              className="rounded-full border border-white/20 px-6 py-3 font-semibold text-white hover:border-amber-300 hover:text-amber-300"
-            >
-              WhatsApp to Book
+              📞 {PHONE_DISPLAY}
             </a>
           </div>
-          <div className="mt-8 grid max-w-md grid-cols-3 gap-3 text-center">
-            {[
-              ["15+", "Years Exp."],
-              ["10k+", "Dresses Stitched"],
-              ["4.9★", "Trusted Quality"],
-            ].map(([v, l]) => (
-              <div key={l} className="rounded-2xl border border-white/10 bg-white/5 p-3">
-                <div className="text-xl font-bold text-amber-300">{v}</div>
-                <div className="text-xs text-neutral-400">{l}</div>
-              </div>
-            ))}
+          <div className="hero-anim hero-anim-4 mt-8 flex items-center gap-4">
+            <div className="flex -space-x-3">
+              {[P.face1, P.face2, P.face3].map((f) => (
+                <span key={f} className="relative h-10 w-10 overflow-hidden rounded-full ring-2 ring-white">
+                  <Image src={f} alt="customer" fill className="object-cover" />
+                </span>
+              ))}
+            </div>
+            <div className="text-sm">
+              <div className="font-bold text-stone-900">★★★★★ 4.9/5</div>
+              <div className="text-stone-500">Loved by 10,000+ customers</div>
+            </div>
           </div>
         </div>
 
-        <div className="relative">
-          <div className="overflow-hidden rounded-3xl border border-amber-400/30 shadow-2xl shadow-black">
-            <div className="relative h-[420px] w-full">
-              <Image
-                src={HERO_IMG}
-                alt="Man in perfectly fitted suit by Khan Tailor"
-                fill
-                className="object-cover"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-6 text-left">
-                <div className="font-display text-2xl font-bold gold-gradient-text">Khan Tailor</div>
-                <p className="text-xs uppercase tracking-[0.3em] text-amber-200">
-                  Trusted • Quality • Perfect Fit
-                </p>
-                <a href="#contact" className="gold-gradient-bg mt-4 block rounded-xl py-3 text-center font-bold text-black">
-                  Book Home Visit →
-                </a>
-              </div>
+        <div className="hero-anim hero-anim-3 relative">
+          <div className="img-hover-zoom relative overflow-hidden rounded-[2rem] shadow-2xl shadow-amber-900/20 ring-1 ring-amber-900/10">
+            <div className="relative h-[440px] w-full md:h-[520px]">
+              <Image src={P.suitMain} alt="Perfectly fitted bespoke suit" fill className="object-cover" priority />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
             </div>
           </div>
-          <div className="absolute -bottom-5 -left-3 flex items-center gap-3 rounded-2xl border border-amber-300/40 bg-black/90 p-3 pr-5 shadow-xl">
+
+          <div className="glass animate-floaty absolute -left-3 top-8 flex items-center gap-3 rounded-2xl p-3 pr-5 shadow-xl md:-left-8">
             <span className="relative h-12 w-12 overflow-hidden rounded-xl">
-              <Image src={HERO_SIDE} alt="Blazer detail" fill className="object-cover" />
+              <Image src={P.sewing} alt="hand stitching" fill className="object-cover" />
             </span>
             <span>
-              <span className="block text-xs text-neutral-400">Next slot</span>
-              <span className="block text-sm font-bold text-amber-300">Today • Home Visit Available</span>
+              <span className="block text-xs font-bold uppercase tracking-wider text-amber-700">Master Craft</span>
+              <span className="block text-sm font-bold text-stone-900">Hand-finished details</span>
+            </span>
+          </div>
+
+          <div className="glass animate-floaty2 absolute -right-2 bottom-10 flex items-center gap-3 rounded-2xl p-3 pr-5 shadow-xl md:-right-6">
+            <span className="relative h-12 w-12 overflow-hidden rounded-xl">
+              <Image src={P.fabricWhite} alt="premium fabric" fill className="object-cover" />
+            </span>
+            <span>
+              <span className="block text-xs font-bold uppercase tracking-wider text-amber-700">Today&apos;s slot</span>
+              <span className="block text-sm font-bold text-stone-900">Home visit available ✓</span>
             </span>
           </div>
         </div>
       </div>
-      <div className="gold-gradient-bg py-2 text-center text-xs font-bold uppercase tracking-[0.25em] text-black">
-        Style • Comfort • Perfection
+
+      <div className="relative border-y border-amber-200/60 bg-white/60 py-3 backdrop-blur">
+        <div className="flex overflow-hidden">
+          <div className="animate-marquee flex shrink-0 items-center gap-8 pr-8 text-sm font-bold uppercase tracking-[0.2em] text-stone-500">
+            {["Bespoke Suits", "Sherwani", "Kurta Pajama", "Blazers", "Shirts", "Pathani", "Tuxedo", "Alteration"].concat(["Bespoke Suits", "Sherwani", "Kurta Pajama", "Blazers", "Shirts", "Pathani", "Tuxedo", "Alteration"]).map((t, i) => (
+              <span key={i} className="flex items-center gap-8">
+                <span>{t}</span>
+                <span className="text-amber-500">✦</span>
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
 }
 
+const categories = [
+  { title: "Bestsellers", sub: "Most loved fits", image: P.suit2 },
+  { title: "Wedding", sub: "Sherwani & suits", image: P.wedding },
+  { title: "Kurta Style", sub: "Festive & daily", image: P.indianMen },
+  { title: "Shirts", sub: "Formal & casual", image: P.shirtsHang },
+];
+
+const services = [
+  { title: "Bespoke Suits", desc: "2-pc / 3-pc suits & blazers with sharp shoulders and clean drape.", price: "from ₹2,499", image: P.suit2 },
+  { title: "Sherwani & Indo-Western", desc: "Royal wedding wear with rich fabrics and regal finishing.", price: "from ₹3,499", image: P.groom },
+  { title: "Kurta Pajama & Pathani", desc: "Breathable festive & daily kurtas in cotton, linen & silk.", price: "from ₹499", image: P.indianMen },
+  { title: "Custom Shirts", desc: "Choose collar, cuff & fit — crisp shirts made to your size.", price: "from ₹349", image: P.whiteShirt },
+  { title: "Trousers & Chinos", desc: "Perfect waist, length & taper for office and casual wear.", price: "from ₹399", image: P.fashionMan },
+  { title: "Alteration & Repair", desc: "Same-day fitting correction, tapering, zip & finishing.", price: "same-day", image: P.sewing },
+];
+
+const gallery = [
+  { src: P.suitMain, label: "Business Suit", h: "h-64 md:h-80" },
+  { src: P.wedding, label: "Wedding Look", h: "h-64 md:h-80" },
+  { src: P.indianMen, label: "Kurta Style", h: "h-64 md:h-80" },
+  { src: P.blazer, label: "Blazer Detail", h: "h-64 md:h-72" },
+  { src: P.whiteShirt, label: "Crisp Shirts", h: "h-64 md:h-72" },
+  { src: P.fabricColor, label: "Fabric Library", h: "h-64 md:h-72" },
+  { src: P.rack, label: "Ready Styles", h: "h-64 md:h-72" },
+  { src: P.businessman, label: "Office Fit", h: "h-64 md:h-72" },
+];
+
 export default function Page() {
+  useReveal();
+
   return (
-    <main>
+    <main className="min-h-screen">
       <Navbar />
       <Hero />
 
-      {/* Strip images */}
-      <section className="mx-auto max-w-6xl px-4 pt-10">
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-          {[HERO_IMG, HERO_SIDE, CRAFT_IMG, FABRIC_IMG].map((s, i) => (
-            <div key={i} className="relative h-40 overflow-hidden rounded-2xl md:h-48">
-              <Image src={s} alt="Khan Tailor work" fill className="object-cover transition hover:scale-105" />
-            </div>
+      {/* Categories like TailorStore */}
+      <section id="collection" className="mx-auto max-w-6xl px-4 py-14">
+        <div className="reveal flex items-end justify-between">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-700">Shop by occasion</p>
+            <h2 className="font-display mt-1 text-3xl font-bold text-stone-900 md:text-4xl">Popular Categories</h2>
+          </div>
+          <a href={WHATSAPP} target="_blank" className="hidden text-sm font-bold text-amber-700 hover:underline md:block">
+            Ask on WhatsApp →
+          </a>
+        </div>
+        <div className="mt-7 grid grid-cols-2 gap-4 lg:grid-cols-4">
+          {categories.map((c, i) => (
+            <a
+              key={c.title}
+              href="#services"
+              className={`reveal-zoom group relative overflow-hidden rounded-3xl shadow-sm transition hover:shadow-xl ${i % 2 ? "md:mt-8" : ""}`}
+              style={{ transitionDelay: `${i * 80}ms` }}
+            >
+              <div className="img-hover-zoom relative h-64 md:h-80">
+                <Image src={c.image} alt={c.title} fill className="object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                <div className="glass absolute bottom-3 left-3 right-3 rounded-2xl p-3">
+                  <div className="text-sm font-bold text-stone-900">{c.title}</div>
+                  <div className="text-xs text-stone-500">{c.sub}</div>
+                </div>
+              </div>
+            </a>
           ))}
         </div>
       </section>
 
-      {/* Services with images */}
+      {/* How it works - like TailorStore */}
+      <section id="process" className="border-y border-amber-100 bg-white/70 py-14 backdrop-blur">
+        <div className="mx-auto max-w-6xl px-4">
+          <p className="reveal text-center text-xs font-bold uppercase tracking-[0.25em] text-amber-700">Here&apos;s how it works</p>
+          <h2 className="reveal font-display mt-1 text-center text-3xl font-bold text-stone-900 md:text-4xl">
+            From First Call to Perfect Fit
+          </h2>
+          <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { n: "1", t: "Choose a style", d: "Pick from collection or send your own design on WhatsApp.", icon: "🎨" },
+              { n: "2", t: "Home measurement", d: "We visit your home — precise measuring, no tape hassle.", icon: "📏" },
+              { n: "3", t: "Expert stitching", d: "Master cutting, premium lining, careful finishing.", icon: "🧵" },
+              { n: "4", t: "Delivered + fitted", d: "On-time doorstep delivery with free fitting check.", icon: "🤵" },
+            ].map((s, i) => (
+              <div key={s.n} className="reveal glass rounded-3xl p-6 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-xl" style={{ transitionDelay: `${i * 90}ms` }}>
+                <div className="gold-bg mx-auto flex h-14 w-14 items-center justify-center rounded-full text-2xl text-white shadow-lg">{s.icon}</div>
+                <div className="mt-1 text-xs font-bold text-amber-600">STEP {s.n}</div>
+                <div className="font-bold text-stone-900">{s.t}</div>
+                <div className="mt-1 text-sm text-stone-500">{s.d}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Signature services */}
       <section id="services" className="mx-auto max-w-6xl px-4 py-14">
-        <p className="text-center text-xs font-bold uppercase tracking-[0.25em] text-amber-700">
-          What we stitch
+        <p className="reveal text-center text-xs font-bold uppercase tracking-[0.25em] text-amber-700">Premium tailoring services</p>
+        <h2 className="reveal font-display mt-1 text-center text-3xl font-bold text-stone-900 md:text-4xl">Our Signature Services</h2>
+        <p className="reveal mx-auto mt-2 max-w-xl text-center text-sm text-stone-500">
+          Every garment is individually cut, stitched and pressed — modern slim or classic comfort, your choice.
         </p>
-        <h2 className="font-display mt-2 text-center text-3xl font-bold md:text-4xl">
-          Services for Every Occasion
-        </h2>
-        <p className="mx-auto mt-2 max-w-xl text-center text-neutral-600">
-          Wedding, festival, office or daily wear — bring your fabric, we stitch it perfectly.
-        </p>
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((s) => (
-            <div
-              key={s.title}
-              className="group overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
-            >
-              <div className="relative h-52 w-full overflow-hidden">
-                <Image
-                  src={s.image}
-                  alt={s.title}
-                  fill
-                  className="object-cover transition duration-500 group-hover:scale-110"
-                />
-                <span className="absolute left-3 top-3 rounded-full bg-black/70 px-3 py-1 text-xs font-bold text-amber-300 backdrop-blur">
-                  {s.price}
-                </span>
+        <div className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {services.map((s, i) => (
+            <div key={s.title} className="reveal group overflow-hidden rounded-3xl border border-stone-100 bg-white shadow-sm transition hover:-translate-y-1.5 hover:shadow-2xl" style={{ transitionDelay: `${(i % 3) * 90}ms` }}>
+              <div className="img-hover-zoom relative h-56 overflow-hidden">
+                <Image src={s.image} alt={s.title} fill className="object-cover" />
+                <span className="glass-dark absolute left-3 top-3 rounded-full px-3 py-1 text-xs font-bold text-amber-300">{s.price}</span>
               </div>
               <div className="p-5">
-                <h3 className="text-lg font-bold">{s.title}</h3>
-                <p className="mt-1 text-sm text-neutral-600">{s.desc}</p>
-                <a href={WHATSAPP} target="_blank" className="mt-3 inline-block text-sm font-bold text-amber-700 hover:text-amber-900">
+                <h3 className="font-bold text-stone-900">{s.title}</h3>
+                <p className="mt-1 text-sm text-stone-500">{s.desc}</p>
+                <a href={WHATSAPP} target="_blank" className="mt-3 inline-block text-sm font-bold text-amber-700 transition group-hover:translate-x-1">
                   Book this →
                 </a>
               </div>
@@ -256,146 +332,170 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Craftsmanship banner */}
-      <section className="mx-auto max-w-6xl px-4 pb-14">
-        <div className="grid overflow-hidden rounded-3xl bg-[#0c0c0e] text-white md:grid-cols-2">
-          <div className="relative h-64 md:h-auto">
-            <Image src={CRAFT_IMG} alt="Tailor stitching with care" fill className="object-cover" />
+      {/* Bespoke collection alternating - like Krishna */}
+      <section className="mx-auto max-w-6xl space-y-6 px-4 pb-14">
+        {[
+          {
+            tag: "Bespoke Collection",
+            title: "Luxury Suits for Every Occasion",
+            desc: "Business meetings to weddings — premium fabrics, precise measurements and refined finishing for a sharp, lasting fit.",
+            points: ["Premium suiting fabrics", "Half/full canvas options", "Free fitting correction"],
+            image: P.businessman,
+            cta: "Book a Consultation",
+          },
+          {
+            tag: "Wedding Special",
+            title: "Sherwanis Crafted for Your Big Day",
+            desc: "Regal sherwanis, Indo-westerns & tuxedos with rich buttons, lining and elegance in every stitch.",
+            points: ["Groom + family packages", "Urgent wedding delivery", "Home trial available"],
+            image: P.groom,
+            cta: "Plan Wedding Outfit",
+          },
+          {
+            tag: "Everyday Elegance",
+            title: "Kurtas & Shirts for Daily Comfort",
+            desc: "Soft cottons and linens, tailored for Punjab weather — festive shine or everyday ease.",
+            points: ["Cotton, linen, silk", "Modern + traditional cuts", "All sizes, all fabrics"],
+            image: P.fashion,
+            cta: "Order Kurta / Shirt",
+          },
+        ].map((b, i) => (
+          <div key={b.title} className={`reveal grid overflow-hidden rounded-[2rem] bg-white shadow-sm ring-1 ring-stone-100 md:grid-cols-2 ${i % 2 ? "md:[&>*:first-child]:order-2" : ""}`}>
+            <div className="img-hover-zoom relative h-72 overflow-hidden md:h-auto md:min-h-[340px]">
+              <Image src={b.image} alt={b.title} fill className="object-cover" />
+            </div>
+            <div className="p-8 md:p-10">
+              <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold uppercase tracking-widest text-amber-800">{b.tag}</span>
+              <h3 className="font-display mt-3 text-2xl font-bold text-stone-900 md:text-3xl">{b.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-stone-500">{b.desc}</p>
+              <ul className="mt-4 space-y-2 text-sm font-medium text-stone-700">
+                {b.points.map((pt) => (
+                  <li key={pt} className="flex items-center gap-2">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-green-100 text-xs text-green-700">✓</span> {pt}
+                  </li>
+                ))}
+              </ul>
+              <a href={WHATSAPP} target="_blank" className="gold-bg mt-6 inline-block rounded-full px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:-translate-y-0.5">
+                {b.cta} →
+              </a>
+            </div>
           </div>
-          <div className="p-8 md:p-10">
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-400">Master Craftsmanship</p>
-            <h3 className="font-display mt-2 text-3xl font-bold">Finishing You Can Feel</h3>
-            <p className="mt-3 text-sm text-neutral-300">
-              Clean inner finishing, strong stitching, proper pressing and fitting check on every piece.
-              Modern machines + experienced hands = long-lasting perfect fit.
-            </p>
-            <ul className="mt-4 space-y-2 text-sm text-neutral-200">
-              <li>✔ Premium lining & interlining</li>
-              <li>✔ Chalk-mark precise cutting</li>
-              <li>✔ Double-check fitting before delivery</li>
-            </ul>
+        ))}
+      </section>
+
+      {/* Fabric variety */}
+      <section className="border-y border-amber-100 bg-gradient-to-b from-amber-50/80 to-white py-14">
+        <div className="mx-auto max-w-6xl px-4">
+          <h2 className="reveal font-display text-center text-3xl font-bold text-stone-900">Choose Your Fabric & Style</h2>
+          <p className="reveal mt-2 text-center text-sm text-stone-500">200+ fabrics — cotton, linen, suiting, silk. Bring your own or pick ours.</p>
+          <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-5">
+            {[
+              { n: "Royal Blue Suiting", image: P.suitMain },
+              { n: "Ivory Sherwani", image: P.wedding },
+              { n: "White Cotton", image: P.fabricWhite },
+              { n: "Festive Prints", image: P.fabricColor },
+              { n: "Casual Linen", image: P.tshirt },
+            ].map((f, i) => (
+              <div key={f.n} className="reveal-zoom group text-center" style={{ transitionDelay: `${i * 70}ms` }}>
+                <div className="img-hover-zoom relative mx-auto h-36 w-full overflow-hidden rounded-2xl shadow md:h-44">
+                  <Image src={f.image} alt={f.n} fill className="object-cover" />
+                </div>
+                <div className="mt-2 text-xs font-bold text-stone-700">{f.n}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Gallery */}
-      <section id="gallery" className="bg-neutral-100/70 py-14">
-        <div className="mx-auto max-w-6xl px-4">
-          <h2 className="font-display text-center text-3xl font-bold">Our Style Gallery</h2>
-          <p className="mt-2 text-center text-neutral-600">A glimpse of fits we love to stitch</p>
-          <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3">
-            {gallery.map((g) => (
-              <div key={g.src + g.label} className="group relative h-56 overflow-hidden rounded-2xl md:h-72">
-                <Image
-                  src={g.src}
-                  alt={g.label}
-                  fill
-                  className="object-cover transition duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-80" />
-                <div className="absolute bottom-3 left-3 rounded-full bg-white/90 px-3 py-1 text-xs font-bold">
-                  {g.label}
-                </div>
+      <section id="gallery" className="mx-auto max-w-6xl px-4 py-14">
+        <h2 className="reveal font-display text-center text-3xl font-bold text-stone-900">Style Gallery</h2>
+        <p className="reveal mt-2 text-center text-sm text-stone-500">Real fits, real fabrics — a glimpse of what we love to stitch</p>
+        <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-4">
+          {gallery.map((g, i) => (
+            <div key={g.label + i} className={`reveal-zoom group relative overflow-hidden rounded-2xl ${g.h}`} style={{ transitionDelay: `${(i % 4) * 80}ms` }}>
+              <Image src={g.src} alt={g.label} fill className="object-cover transition duration-700 group-hover:scale-110" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition group-hover:opacity-100" />
+              <div className="glass absolute bottom-3 left-3 translate-y-2 rounded-full px-3 py-1 text-xs font-bold text-stone-800 opacity-0 transition group-hover:translate-y-0 group-hover:opacity-100">
+                {g.label}
               </div>
-            ))}
-          </div>
-          <p className="mt-4 text-center text-xs text-neutral-500">
-            Sample style photos for reference. Send your own design on WhatsApp — we will stitch it.
-          </p>
-        </div>
-      </section>
-
-      {/* Why choose us */}
-      <section id="why" className="bg-[#0c0c0e] py-14 text-white">
-        <div className="mx-auto max-w-6xl px-4">
-          <p className="text-center text-xs font-bold uppercase tracking-[0.25em] text-amber-400">
-            Why choose us
-          </p>
-          <h2 className="font-display mt-2 text-center text-3xl font-bold md:text-4xl">
-            The <span className="gold-gradient-text">Khan Tailor</span> Promise
-          </h2>
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
-            {whyUs.map((w) => (
-              <div key={w.title} className="rounded-2xl border border-amber-400/25 bg-white/5 p-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full gold-gradient-bg text-2xl">
-                  {w.icon}
-                </div>
-                <h3 className="mt-4 font-bold text-amber-300 uppercase tracking-wide text-sm">{w.title}</h3>
-                <p className="mt-2 text-sm text-neutral-300">{w.desc}</p>
-              </div>
-            ))}
-          </div>
-          <div className="relative mt-8 overflow-hidden rounded-2xl">
-            <div className="relative h-48 w-full md:h-56">
-              <Image src={FABRIC_IMG} alt="Premium fabrics" fill className="object-cover" />
-              <div className="absolute inset-0 bg-black/60" />
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center md:flex-row md:gap-8">
-                <div>
-                  <div className="text-xl font-bold">Need urgent stitching for wedding?</div>
-                  <div className="text-sm text-neutral-300">Call now — fast measurement & delivery.</div>
-                </div>
-                <a href={`tel:+91${PHONE}`} className="gold-gradient-bg mt-3 rounded-full px-6 py-3 font-bold text-black md:mt-0">
-                  📞 {PHONE_DISPLAY}
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Process */}
-      <section id="process" className="mx-auto max-w-6xl px-4 py-14">
-        <h2 className="font-display text-center text-3xl font-bold">How It Works</h2>
-        <p className="mt-2 text-center text-neutral-600">Easy 4-step doorstep tailoring</p>
-        <div className="mt-8 grid gap-4 md:grid-cols-4">
-          {steps.map((s) => (
-            <div key={s.n} className="rounded-2xl border bg-white p-5 shadow-sm">
-              <div className="font-display text-3xl font-bold text-amber-500">{s.n}</div>
-              <div className="mt-2 font-bold">{s.t}</div>
-              <div className="mt-1 text-sm text-neutral-600">{s.d}</div>
             </div>
           ))}
+        </div>
+        <p className="mt-4 text-center text-xs text-stone-400">Sample style photos for reference — send your design, we&apos;ll stitch it.</p>
+      </section>
+
+      {/* Testimonials */}
+      <section className="mx-auto max-w-6xl px-4 pb-14">
+        <h2 className="reveal font-display text-center text-3xl font-bold text-stone-900">What Customers Say</h2>
+        <div className="mt-7 grid gap-4 md:grid-cols-3">
+          {[
+            { name: "Rahul Sharma", role: "Wedding Client", text: "My wedding sherwani fit was absolutely perfect. Fabric quality excellent, finishing premium. Got so many compliments!", face: P.face1 },
+            { name: "Amit Verma", role: "Regular Customer", text: "Trusted tailor for years — suits to shirts, always precise stitching and on-time delivery. Highly recommended.", face: P.face2 },
+            { name: "Simran Kaur", role: "Family Function", text: "Ordered kurtas for whole family. Home measurement was so easy, fitting perfect for everyone. Very professional.", face: P.face3 },
+          ].map((t, i) => (
+            <div key={t.name} className="reveal glass rounded-3xl p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl" style={{ transitionDelay: `${i * 90}ms` }}>
+              <div className="text-amber-500">★★★★★</div>
+              <p className="mt-2 text-sm leading-relaxed text-stone-600">&ldquo;{t.text}&rdquo;</p>
+              <div className="mt-4 flex items-center gap-3">
+                <span className="relative h-11 w-11 overflow-hidden rounded-full ring-2 ring-amber-200">
+                  <Image src={t.face} alt={t.name} fill className="object-cover" />
+                </span>
+                <span>
+                  <span className="block text-sm font-bold text-stone-900">{t.name}</span>
+                  <span className="block text-xs text-stone-500">{t.role}</span>
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="reveal-zoom gold-bg mt-8 rounded-[2rem] p-8 text-center text-white shadow-xl md:p-10">
+          <h3 className="font-display text-2xl font-bold md:text-3xl">Our Fit Guarantee</h3>
+          <p className="mx-auto mt-2 max-w-xl text-sm text-white/90">
+            If the first fit isn&apos;t quite right, we&apos;ll refine it at no cost. Reasonable rates, trusted quality, on-time delivery — that&apos;s the Khan promise.
+          </p>
+          <a href={`tel:+91${PHONE}`} className="mt-5 inline-block rounded-full bg-white px-7 py-3 font-bold text-stone-900 shadow transition hover:-translate-y-0.5">
+            📞 Call {PHONE_DISPLAY}
+          </a>
         </div>
       </section>
 
       {/* Contact */}
-      <section id="contact" className="bg-amber-50/60 border-y border-amber-200/50 py-14">
+      <section id="contact" className="border-t border-amber-100 bg-white py-14">
         <div className="mx-auto grid max-w-6xl gap-6 px-4 md:grid-cols-2">
-          <div className="rounded-3xl bg-[#0c0c0e] p-8 text-white">
+          <div className="reveal-left overflow-hidden rounded-[2rem] bg-stone-900 p-8 text-white">
             <h2 className="font-display text-3xl font-bold">Visit or Call Us</h2>
-            <p className="mt-2 text-neutral-400">Near you in Amritsar — home service in nearby areas.</p>
-            <div className="relative mt-5 h-44 overflow-hidden rounded-2xl">
-              <Image src={HERO_SIDE} alt="Khan Tailor shop" fill className="object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-              <div className="absolute bottom-3 left-3 text-sm font-bold">📍 Gumtala Link Road, Amritsar</div>
-            </div>
-            <div className="mt-5 space-y-4 text-sm">
-              <a href={`tel:+91${PHONE}`} className="flex items-center gap-3 rounded-2xl bg-white/5 border border-white/10 p-4 hover:border-amber-400">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full gold-gradient-bg">📞</span>
-                <span><span className="block text-neutral-400 text-xs uppercase tracking-widest">Contact</span><span className="text-lg font-bold text-amber-300">{PHONE_DISPLAY}</span></span>
-              </a>
-              <a href={MAPS} target="_blank" className="flex items-center gap-3 rounded-2xl bg-white/5 border border-white/10 p-4 hover:border-amber-400">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full gold-gradient-bg">📍</span>
-                <span><span className="block text-neutral-400 text-xs uppercase tracking-widest">Address</span><span className="font-medium">{ADDRESS}</span></span>
-              </a>
-              <div className="flex items-center gap-3 rounded-2xl bg-white/5 border border-white/10 p-4">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full gold-gradient-bg">⏰</span>
-                <span><span className="block text-neutral-400 text-xs uppercase tracking-widest">Timing</span><span className="font-medium">Mon – Sun • 9:30 AM – 9:00 PM</span></span>
+            <p className="mt-2 text-sm text-stone-400">Near you in Amritsar — home service in nearby areas.</p>
+            <div className="img-hover-zoom relative mt-5 h-48 overflow-hidden rounded-2xl">
+              <Image src={P.store} alt="Khan Tailor store" fill className="object-cover" />
+              <div className="glass-dark absolute bottom-3 left-3 rounded-full px-4 py-1.5 text-xs font-bold text-white">
+                📍 Gumtala Link Road, Amritsar
               </div>
             </div>
-            <div className="mt-6 flex gap-3">
-              <a href={WHATSAPP} target="_blank" className="flex-1 rounded-full bg-green-600 py-3 text-center font-bold hover:bg-green-700">
-                WhatsApp
+            <div className="mt-5 space-y-3 text-sm">
+              <a href={`tel:+91${PHONE}`} className="glass-dark flex items-center gap-3 rounded-2xl p-4 transition hover:border-amber-400">
+                <span className="gold-bg flex h-10 w-10 items-center justify-center rounded-full">📞</span>
+                <span><span className="block text-xs uppercase tracking-widest text-stone-400">Contact</span><span className="text-lg font-bold text-amber-300">{PHONE_DISPLAY}</span></span>
               </a>
-              <a href={MAPS} target="_blank" className="flex-1 rounded-full border border-white/20 py-3 text-center font-bold hover:border-amber-300 hover:text-amber-300">
-                Get Direction
+              <a href={MAPS} target="_blank" className="glass-dark flex items-center gap-3 rounded-2xl p-4 transition hover:border-amber-400">
+                <span className="gold-bg flex h-10 w-10 items-center justify-center rounded-full">📍</span>
+                <span><span className="block text-xs uppercase tracking-widest text-stone-400">Address</span><span className="font-medium">{ADDRESS}</span></span>
               </a>
+              <div className="glass-dark flex items-center gap-3 rounded-2xl p-4">
+                <span className="gold-bg flex h-10 w-10 items-center justify-center rounded-full">⏰</span>
+                <span><span className="block text-xs uppercase tracking-widest text-stone-400">Timing</span><span className="font-medium">Mon – Sun • 9:30 AM – 9:00 PM</span></span>
+              </div>
+            </div>
+            <div className="mt-5 flex gap-3">
+              <a href={WHATSAPP} target="_blank" className="flex-1 rounded-full bg-green-600 py-3 text-center font-bold transition hover:bg-green-700">WhatsApp</a>
+              <a href={MAPS} target="_blank" className="flex-1 rounded-full border border-white/20 py-3 text-center font-bold transition hover:border-amber-300 hover:text-amber-300">Direction</a>
             </div>
           </div>
 
-          <div className="rounded-3xl border bg-white p-8 shadow-xl">
-            <h3 className="text-xl font-bold">Book a Home Visit</h3>
-            <p className="text-sm text-neutral-600">Fill this — it will open WhatsApp ready to send.</p>
+          <div className="reveal-right rounded-[2rem] border border-stone-100 bg-cream bg-[#fffdf8] p-8 shadow-xl">
+            <h3 className="font-display text-2xl font-bold text-stone-900">Book a Home Visit</h3>
+            <p className="text-sm text-stone-500">Fill this — it opens WhatsApp ready to send.</p>
             <form
               className="mt-5 space-y-3"
               onSubmit={(e) => {
@@ -405,40 +505,36 @@ export default function Page() {
                 window.open(`https://wa.me/91${PHONE}?text=${msg}`, "_blank");
               }}
             >
-              <input name="name" required placeholder="Your name" className="w-full rounded-xl border px-4 py-3 outline-none focus:border-amber-500" />
-              <input name="phone" required placeholder="Your mobile number" className="w-full rounded-xl border px-4 py-3 outline-none focus:border-amber-500" />
-              <select name="service" className="w-full rounded-xl border px-4 py-3 outline-none focus:border-amber-500">
+              <input name="name" required placeholder="Your name" className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-200" />
+              <input name="phone" required placeholder="Your mobile number" className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-200" />
+              <select name="service" className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-amber-500">
                 <option>Suit / Blazer</option>
                 <option>Sherwani</option>
                 <option>Kurta Pajama</option>
-                <option>Shirt Pant</option>
+                <option>Shirt / Trouser</option>
                 <option>Alteration</option>
                 <option>Other</option>
               </select>
-              <textarea name="msg" rows={3} placeholder="e.g. Need 2 kurtas for wedding next week" className="w-full rounded-xl border px-4 py-3 outline-none focus:border-amber-500" />
-              <button className="gold-gradient-bg w-full rounded-xl py-3 font-bold text-black hover:brightness-110">
+              <textarea name="msg" rows={3} placeholder="e.g. Need 2 kurtas for wedding next week" className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-200" />
+              <button className="gold-bg w-full rounded-2xl py-3.5 font-bold text-white shadow-lg transition hover:-translate-y-0.5 hover:brightness-110">
                 Send Booking on WhatsApp →
               </button>
-              <p className="text-center text-xs text-neutral-500">No advance needed • Free measurement nearby</p>
+              <p className="text-center text-xs text-stone-400">No advance needed • Free measurement nearby</p>
             </form>
           </div>
         </div>
       </section>
 
-      <footer className="bg-[#0c0c0e] py-8 text-center text-sm text-neutral-400">
-        <div className="font-display text-2xl font-bold gold-gradient-text">Khan Tailor</div>
-        <div className="mt-1 text-xs uppercase tracking-[0.25em]">Style • Comfort • Perfection</div>
-        <div className="mt-3">{ADDRESS} • 📞 {PHONE_DISPLAY}</div>
-        <div className="mt-2 text-xs text-neutral-500">© {new Date().getFullYear()} Khan Tailor, Amritsar.</div>
+      <footer className="bg-stone-950 py-10 text-center text-sm text-stone-400">
+        <div className="font-display text-2xl font-bold text-white">Khan <span className="gold-text">Tailor</span></div>
+        <div className="mt-1 text-[11px] uppercase tracking-[0.25em] text-amber-500">Style • Comfort • Perfection</div>
+        <div className="mt-3 px-4">{ADDRESS} • 📞 {PHONE_DISPLAY}</div>
+        <div className="mt-2 text-xs text-stone-600">© {new Date().getFullYear()} Khan Tailor, Amritsar.</div>
       </footer>
 
-      <div className="fixed bottom-0 left-0 right-0 z-50 grid grid-cols-2 gap-2 border-t bg-white/95 p-2 backdrop-blur md:hidden">
-        <a href={`tel:+91${PHONE}`} className="rounded-full bg-black py-3 text-center font-bold text-amber-300">
-          📞 Call Now
-        </a>
-        <a href={WHATSAPP} className="rounded-full bg-green-600 py-3 text-center font-bold text-white">
-          WhatsApp
-        </a>
+      <div className="fixed bottom-0 left-0 right-0 z-50 grid grid-cols-2 gap-2 border-t border-stone-200 bg-white/85 p-2 backdrop-blur-xl md:hidden">
+        <a href={`tel:+91${PHONE}`} className="rounded-full bg-stone-900 py-3 text-center font-bold text-amber-300">📞 Call Now</a>
+        <a href={WHATSAPP} className="rounded-full bg-green-600 py-3 text-center font-bold text-white">WhatsApp</a>
       </div>
       <div className="h-16 md:hidden" />
     </main>
