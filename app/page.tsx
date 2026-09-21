@@ -64,25 +64,27 @@ function Navbar() {
   }, []);
 
   return (
-    <>
-      <div className="gold-bg px-4 py-1.5 text-center text-[11px] font-bold uppercase tracking-[0.18em] text-white md:text-xs">
-        ✓ Made-to-Measure &nbsp;&nbsp; ✓ 10,000+ Happy Customers &nbsp;&nbsp; ✓ Free Fitting Fix &nbsp;&nbsp; ✓ On-Door Service
+    <div className="sticky top-0 z-50">
+      <div className="gold-bg px-2 py-1.5 text-center text-[10px] font-bold uppercase tracking-[0.12em] text-white sm:text-xs sm:tracking-[0.18em]">
+        ✓ Made-to-Measure &nbsp; ✓ 10,000+ Happy Customers
+        <span className="hidden sm:inline">&nbsp;&nbsp; ✓ Free Fitting Fix &nbsp;&nbsp; ✓ On-Door Service</span>
+        <span className="sm:hidden"><br />✓ On-Door Service</span>
       </div>
       <header
-        className={`fixed inset-x-0 top-[28px] z-50 transition-all duration-500 md:top-[30px] ${
-          scrolled ? "glass shadow-lg shadow-amber-900/5" : "bg-transparent"
+        className={`transition-all duration-500 ${
+          scrolled ? "glass shadow-lg shadow-amber-900/10" : "bg-[#fdfbf6]/80 backdrop-blur"
         }`}
       >
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <a href="#home" className="flex items-center gap-2.5">
-            <span className="relative h-11 w-11 overflow-hidden rounded-full ring-2 ring-amber-500/60 shadow">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-2 sm:px-4 sm:py-3">
+          <a href="#home" className="flex min-w-0 items-center gap-2">
+            <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full ring-2 ring-amber-500/60 shadow sm:h-11 sm:w-11">
               <Image src={P.suit2} alt="Khan Tailor" fill className="object-cover" />
             </span>
-            <span className="leading-tight">
-              <span className="font-display block text-xl font-bold tracking-wide text-stone-900">
+            <span className="min-w-0 leading-tight">
+              <span className="font-display block truncate text-lg font-bold tracking-wide text-stone-900 sm:text-xl">
                 Khan <span className="gold-text">Tailor</span>
               </span>
-              <span className="block text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-700">
+              <span className="hidden text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-700 min-[420px]:block">
                 Style • Comfort • Perfection
               </span>
             </span>
@@ -94,7 +96,7 @@ function Navbar() {
             <a href="#process" className="transition hover:text-amber-700">Process</a>
             <a href="#contact" className="transition hover:text-amber-700">Contact</a>
           </nav>
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <a
               href={WHATSAPP}
               target="_blank"
@@ -104,51 +106,51 @@ function Navbar() {
             </a>
             <a
               href={`tel:+91${PHONE}`}
-              className="gold-bg rounded-full px-4 py-2 text-sm font-bold text-white shadow-lg shadow-amber-500/30 transition hover:brightness-110"
+              className="gold-bg whitespace-nowrap rounded-full px-3 py-2 text-xs font-bold text-white shadow-lg shadow-amber-500/30 transition hover:brightness-110 sm:px-4 sm:text-sm"
             >
               📞 {PHONE_DISPLAY}
             </a>
           </div>
         </div>
       </header>
-    </>
+    </div>
   );
 }
 
 function Hero() {
   return (
-    <section id="home" className="dot-pattern relative overflow-hidden pt-[130px] md:pt-[140px]">
+    <section id="home" className="dot-pattern relative overflow-hidden pt-8 md:pt-12">
       <div className="animate-blob pointer-events-none absolute -left-24 top-20 h-96 w-96 rounded-full bg-amber-200/50 blur-3xl" />
       <div className="animate-blob pointer-events-none absolute -right-24 top-64 h-[28rem] w-[28rem] rounded-full bg-orange-100 blur-3xl" style={{ animationDelay: "-6s" }} />
 
-      <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-4 pb-12 md:grid-cols-2 md:pb-20">
+      <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 pb-12 md:grid-cols-2 md:gap-12 md:pb-20">
         <div>
-          <span className="hero-anim hero-anim-1 glass inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-amber-800 shadow-sm">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
-            Amritsar • On-door tailoring
+          <span className="hero-anim hero-anim-1 glass inline-flex max-w-full items-center gap-2 rounded-full px-3 py-2 text-[10px] font-bold uppercase tracking-[0.12em] text-amber-800 shadow-sm sm:px-4 sm:text-xs sm:tracking-[0.18em]">
+            <span className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-green-500" />
+            <span className="truncate">Amritsar • On-door tailoring</span>
           </span>
-          <h1 className="hero-anim hero-anim-2 font-display mt-5 text-5xl font-bold leading-[1.05] text-stone-900 md:text-6xl">
+          <h1 className="hero-anim hero-anim-2 font-display mt-4 text-4xl font-bold leading-[1.08] text-stone-900 sm:text-5xl md:mt-5 md:text-6xl">
             Tailored to
             <br />
             <span className="gold-text">Perfection,</span>
             <br />
             Made for You.
           </h1>
-          <p className="hero-anim hero-anim-3 mt-5 max-w-md text-[15px] leading-relaxed text-stone-600">
+          <p className="hero-anim hero-anim-3 mt-4 max-w-md text-sm leading-relaxed text-stone-600 sm:text-[15px] md:mt-5">
             Bespoke Suits, Wedding Sherwanis, Kurta-Pajama & Shirts — crafted with premium
             fabrics and precise measurements. From measurement to delivery,{" "}
             <b className="text-stone-900">everything at your doorstep.</b>
           </p>
-          <div className="hero-anim hero-anim-4 mt-7 flex flex-wrap gap-3">
+          <div className="hero-anim hero-anim-4 mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap md:mt-7">
             <a
               href="#collection"
-              className="gold-bg rounded-full px-7 py-3.5 font-bold text-white shadow-xl shadow-amber-500/30 transition hover:-translate-y-0.5 hover:shadow-2xl"
+              className="gold-bg rounded-full px-7 py-3.5 text-center font-bold text-white shadow-xl shadow-amber-500/30 transition hover:-translate-y-0.5 hover:shadow-2xl"
             >
               Explore Collection →
             </a>
             <a
               href={`tel:+91${PHONE}`}
-              className="glass rounded-full px-7 py-3.5 font-bold text-stone-800 shadow transition hover:-translate-y-0.5"
+              className="glass rounded-full px-7 py-3.5 text-center font-bold text-stone-800 shadow transition hover:-translate-y-0.5"
             >
               📞 {PHONE_DISPLAY}
             </a>
@@ -168,31 +170,31 @@ function Hero() {
           </div>
         </div>
 
-        <div className="hero-anim hero-anim-3 relative">
-          <div className="img-hover-zoom relative overflow-hidden rounded-[2rem] shadow-2xl shadow-amber-900/20 ring-1 ring-amber-900/10">
-            <div className="relative h-[440px] w-full md:h-[520px]">
+        <div className="hero-anim hero-anim-3 relative mx-1 sm:mx-0">
+          <div className="img-hover-zoom relative overflow-hidden rounded-[1.5rem] shadow-2xl shadow-amber-900/20 ring-1 ring-amber-900/10 sm:rounded-[2rem]">
+            <div className="relative h-[340px] w-full sm:h-[440px] md:h-[520px]">
               <Image src={P.suitMain} alt="Perfectly fitted bespoke suit" fill className="object-cover" priority />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
             </div>
           </div>
 
-          <div className="glass animate-floaty absolute -left-3 top-8 flex items-center gap-3 rounded-2xl p-3 pr-5 shadow-xl md:-left-8">
-            <span className="relative h-12 w-12 overflow-hidden rounded-xl">
+          <div className="glass animate-floaty absolute left-2 top-6 flex items-center gap-2 rounded-2xl p-2 pr-4 shadow-xl sm:gap-3 sm:p-3 sm:pr-5 md:-left-6">
+            <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-xl sm:h-12 sm:w-12">
               <Image src={P.sewing} alt="hand stitching" fill className="object-cover" />
             </span>
             <span>
-              <span className="block text-xs font-bold uppercase tracking-wider text-amber-700">Master Craft</span>
-              <span className="block text-sm font-bold text-stone-900">Hand-finished details</span>
+              <span className="block text-[10px] font-bold uppercase tracking-wider text-amber-700 sm:text-xs">Master Craft</span>
+              <span className="block text-xs font-bold text-stone-900 sm:text-sm">Hand-finished details</span>
             </span>
           </div>
 
-          <div className="glass animate-floaty2 absolute -right-2 bottom-10 flex items-center gap-3 rounded-2xl p-3 pr-5 shadow-xl md:-right-6">
-            <span className="relative h-12 w-12 overflow-hidden rounded-xl">
+          <div className="glass animate-floaty2 absolute bottom-6 right-2 flex items-center gap-2 rounded-2xl p-2 pr-4 shadow-xl sm:gap-3 sm:p-3 sm:pr-5 md:-right-4">
+            <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-xl sm:h-12 sm:w-12">
               <Image src={P.fabricWhite} alt="premium fabric" fill className="object-cover" />
             </span>
             <span>
-              <span className="block text-xs font-bold uppercase tracking-wider text-amber-700">Today&apos;s slot</span>
-              <span className="block text-sm font-bold text-stone-900">Home visit available ✓</span>
+              <span className="block text-[10px] font-bold uppercase tracking-wider text-amber-700 sm:text-xs">Today&apos;s slot</span>
+              <span className="block text-xs font-bold text-stone-900 sm:text-sm">Home visit available ✓</span>
             </span>
           </div>
         </div>
@@ -565,11 +567,13 @@ export default function Page() {
         <div className="mt-2 text-xs text-stone-600">© {new Date().getFullYear()} Khan Tailor, Amritsar.</div>
       </footer>
 
-      <div className="fixed bottom-0 left-0 right-0 z-50 grid grid-cols-2 gap-2 border-t border-stone-200 bg-white/85 p-2 backdrop-blur-xl md:hidden">
-        <a href={`tel:+91${PHONE}`} className="rounded-full bg-stone-900 py-3 text-center font-bold text-amber-300">📞 Call Now</a>
-        <a href={WHATSAPP} className="rounded-full bg-green-600 py-3 text-center font-bold text-white">WhatsApp</a>
+      <div className="fixed inset-x-0 bottom-0 z-50 border-t border-stone-200 bg-white/90 backdrop-blur-xl md:hidden" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
+        <div className="grid grid-cols-2 gap-2 p-2">
+          <a href={`tel:+91${PHONE}`} className="rounded-full bg-stone-900 py-2.5 text-center text-sm font-bold text-amber-300">📞 Call Now</a>
+          <a href={WHATSAPP} className="rounded-full bg-green-600 py-2.5 text-center text-sm font-bold text-white">WhatsApp</a>
+        </div>
       </div>
-      <div className="h-16 md:hidden" />
+      <div className="h-14 md:hidden" />
     </main>
   );
 }
