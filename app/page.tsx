@@ -222,12 +222,12 @@ const categories = [
 ];
 
 const services = [
-  { title: "Bespoke Suits", desc: "2-pc / 3-pc suits & blazers with sharp shoulders and clean drape.", price: "from ₹2,499", image: P.suit2 },
-  { title: "Sherwani & Indo-Western", desc: "Royal wedding wear with rich fabrics and regal finishing.", price: "from ₹3,499", image: P.groom },
-  { title: "Kurta Pajama & Pathani", desc: "Breathable festive & daily kurtas in cotton, linen & silk.", price: "from ₹499", image: P.indianMen },
-  { title: "Custom Shirts", desc: "Choose collar, cuff & fit — crisp shirts made to your size.", price: "from ₹349", image: P.whiteShirt },
-  { title: "Trousers & Chinos", desc: "Perfect waist, length & taper for office and casual wear.", price: "from ₹399", image: P.fashionMan },
-  { title: "Alteration & Repair", desc: "Same-day fitting correction, tapering, zip & finishing.", price: "same-day", image: P.sewing },
+  { title: "Bespoke Suits", desc: "2-pc / 3-pc suits & blazers with sharp shoulders and clean drape.", image: P.suit2 },
+  { title: "Sherwani & Indo-Western", desc: "Royal wedding wear with rich fabrics and regal finishing.", image: P.groom },
+  { title: "Kurta Pajama & Pathani", desc: "Breathable festive & daily kurtas in cotton, linen & silk.", image: P.indianMen },
+  { title: "Custom Shirts", desc: "Choose collar, cuff & fit — crisp shirts made to your size.", image: P.whiteShirt },
+  { title: "Trousers & Chinos", desc: "Perfect waist, length & taper for office and casual wear.", image: P.fashionMan },
+  { title: "Alteration & Repair", desc: "Same-day fitting correction, tapering, zip & finishing.", image: P.sewing },
 ];
 
 const gallery = [
@@ -318,7 +318,6 @@ export default function Page() {
             <div key={s.title} className="reveal group overflow-hidden rounded-3xl border border-stone-100 bg-white shadow-sm transition hover:-translate-y-1.5 hover:shadow-2xl" style={{ transitionDelay: `${(i % 3) * 90}ms` }}>
               <div className="img-hover-zoom relative h-56 overflow-hidden">
                 <Image src={s.image} alt={s.title} fill className="object-cover" />
-                <span className="glass-dark absolute left-3 top-3 rounded-full px-3 py-1 text-xs font-bold text-amber-300">{s.price}</span>
               </div>
               <div className="p-5">
                 <h3 className="font-bold text-stone-900">{s.title}</h3>
@@ -453,11 +452,45 @@ export default function Page() {
         <div className="reveal-zoom gold-bg mt-8 rounded-[2rem] p-8 text-center text-white shadow-xl md:p-10">
           <h3 className="font-display text-2xl font-bold md:text-3xl">Our Fit Guarantee</h3>
           <p className="mx-auto mt-2 max-w-xl text-sm text-white/90">
-            If the first fit isn&apos;t quite right, we&apos;ll refine it at no cost. Reasonable rates, trusted quality, on-time delivery — that&apos;s the Khan promise.
+            If the first fit isn&apos;t quite right, we&apos;ll refine it at no cost. Trusted quality and on-time delivery — that&apos;s the Khan promise.
           </p>
           <a href={`tel:+91${PHONE}`} className="mt-5 inline-block rounded-full bg-white px-7 py-3 font-bold text-stone-900 shadow transition hover:-translate-y-0.5">
             📞 Call {PHONE_DISPLAY}
           </a>
+        </div>
+      </section>
+
+      {/* FAQ - helps Google show us for common searches */}
+      <section id="faq" className="mx-auto max-w-4xl px-4 pb-14">
+        <h2 className="reveal font-display text-center text-3xl font-bold text-stone-900">
+          Common Questions — Tailor in Amritsar
+        </h2>
+        <div className="mt-6 space-y-3">
+          {[
+            {
+              q: "Do you offer home measurement and delivery in Amritsar?",
+              a: "Yes. Khan Tailor offers on-door service — we come to your home for measurement and deliver the stitched clothes to your doorstep in Amritsar, including Gumtala, Airport Road and nearby areas. Call 82646-20991.",
+            },
+            {
+              q: "What do you stitch? Suits, sherwani, kurta-pajama?",
+              a: "We stitch bespoke suits & blazers, wedding sherwanis & Indo-westerns, kurta-pajama & Pathani suits, custom shirts & trousers, plus same-day alteration and repair.",
+            },
+            {
+              q: "Where is Khan Tailor located?",
+              a: "Gumtala Link Road, Airport Road, Jujhar Singh Avenue, Amritsar (143001). Open Mon–Sun, 9:30 AM – 9:00 PM. Home service available.",
+            },
+            {
+              q: "Do you do urgent / wedding stitching?",
+              a: "Yes, we handle urgent wedding and function orders with fast measurement and on-time delivery. Call 82646-20991 and tell us your date.",
+            },
+          ].map((f) => (
+            <details key={f.q} className="reveal group rounded-2xl border border-stone-200 bg-white p-5 shadow-sm">
+              <summary className="cursor-pointer list-none font-bold text-stone-900">
+                <span className="mr-2 text-amber-600">+</span> {f.q}
+              </summary>
+              <p className="mt-2 text-sm leading-relaxed text-stone-600">{f.a}</p>
+            </details>
+          ))}
         </div>
       </section>
 
@@ -519,7 +552,7 @@ export default function Page() {
               <button className="gold-bg w-full rounded-2xl py-3.5 font-bold text-white shadow-lg transition hover:-translate-y-0.5 hover:brightness-110">
                 Send Booking on WhatsApp →
               </button>
-              <p className="text-center text-xs text-stone-400">No advance needed • Free measurement nearby</p>
+              <p className="text-center text-xs text-stone-400">Free measurement nearby • Home service available</p>
             </form>
           </div>
         </div>
