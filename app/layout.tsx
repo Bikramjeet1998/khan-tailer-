@@ -76,7 +76,7 @@ export const metadata: Metadata = {
     ICBM: "31.6340, 74.8723",
   },
   // After you verify in Google Search Console, paste the code here:
-  // verification: { google: "PASTE_YOUR_CODE_HERE" },
+  verification: { google: "cJl1-lN8cbgXSsN79CKRKXWXIs9NXTMfO1_4VkEerHY" },
 };
 
 export const viewport: Viewport = {
