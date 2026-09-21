@@ -56,12 +56,22 @@ function useReveal() {
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 24);
     fn();
     window.addEventListener("scroll", fn, { passive: true });
     return () => window.removeEventListener("scroll", fn);
   }, []);
+
+  const links = [
+    ["#collection", "Collection"],
+    ["#services", "Services"],
+    ["#gallery", "Gallery"],
+    ["#process", "Process"],
+    ["#faq", "FAQ"],
+    ["#contact", "Contact"],
+  ];
 
   return (
     <div className="sticky top-0 z-50">
@@ -94,9 +104,10 @@ function Navbar() {
             <a href="#services" className="transition hover:text-amber-700">Services</a>
             <a href="#gallery" className="transition hover:text-amber-700">Gallery</a>
             <a href="#process" className="transition hover:text-amber-700">Process</a>
+            <a href="#faq" className="transition hover:text-amber-700">FAQ</a>
             <a href="#contact" className="transition hover:text-amber-700">Contact</a>
           </nav>
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
             <a
               href={WHATSAPP}
               target="_blank"
@@ -106,12 +117,48 @@ function Navbar() {
             </a>
             <a
               href={`tel:+91${PHONE}`}
-              className="gold-bg whitespace-nowrap rounded-full px-3 py-2 text-xs font-bold text-white shadow-lg shadow-amber-500/30 transition hover:brightness-110 sm:px-4 sm:text-sm"
+              className="gold-bg hidden whitespace-nowrap rounded-full px-3 py-2 text-xs font-bold text-white shadow-lg shadow-amber-500/30 transition hover:brightness-110 min-[420px]:block sm:px-4 sm:text-sm"
             >
               📞 {PHONE_DISPLAY}
             </a>
+            <button
+              onClick={() => setOpen(!open)}
+              aria-label="Open menu"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-stone-300 bg-white/80 text-lg font-bold text-stone-800 shadow-sm backdrop-blur transition hover:border-amber-500 lg:hidden"
+            >
+              {open ? "✕" : "☰"}
+            </button>
           </div>
         </div>
+        {open && (
+          <nav className="glass mx-3 mb-3 rounded-2xl p-2 shadow-xl lg:hidden">
+            {links.map(([href, label]) => (
+              <a
+                key={href}
+                href={href}
+                onClick={() => setOpen(false)}
+                className="block rounded-xl px-4 py-3 text-sm font-bold text-stone-800 transition hover:bg-amber-100"
+              >
+                {label}
+              </a>
+            ))}
+            <div className="grid grid-cols-2 gap-2 p-2">
+              <a
+                href={`tel:+91${PHONE}`}
+                className="gold-bg rounded-full py-2.5 text-center text-sm font-bold text-white"
+              >
+                📞 Call
+              </a>
+              <a
+                href={WHATSAPP}
+                target="_blank"
+                className="rounded-full bg-green-600 py-2.5 text-center text-sm font-bold text-white"
+              >
+                WhatsApp
+              </a>
+            </div>
+          </nav>
+        )}
       </header>
     </div>
   );
