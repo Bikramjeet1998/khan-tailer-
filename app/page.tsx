@@ -9,6 +9,11 @@ const ADDRESS = "Gumtala Link Road, Airport Road, Jujhar Singh Avenue, Amritsar 
 const WHATSAPP = `https://wa.me/91${PHONE}?text=${encodeURIComponent("Hello Khan Tailor, I want to book a stitching / measurement visit.")}`;
 const MAPS = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Gumtala Link Road Airport Road Jujhar Singh Avenue Amritsar 143001")}`;
 
+// ── Developer credit: replace with your own details ──
+const DEV_NAME = "Bikramjeet Singh";
+const DEV_PHONE = "6283974746";
+const DEV_WHATSAPP = `https://wa.me/91${DEV_PHONE}?text=${encodeURIComponent("Hi, I need a website / mobile app for my business. Please share details.")}`;
+
 const img = (id: string, w = 800) =>
   `https://images.unsplash.com/${id}?q=80&w=${w}&auto=format&fit=crop`;
 
@@ -612,6 +617,21 @@ export default function Page() {
         <div className="mt-1 text-[11px] uppercase tracking-[0.25em] text-amber-500">Style • Comfort • Perfection</div>
         <div className="mt-3 px-4">{ADDRESS} • 📞 {PHONE_DISPLAY}</div>
         <div className="mt-2 text-xs text-stone-600">© {new Date().getFullYear()} Khan Tailor, Amritsar.</div>
+
+        <div className="mx-auto mt-6 max-w-md px-4">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
+            <div className="text-[11px] uppercase tracking-[0.2em] text-stone-500">Designed & Developed by</div>
+            <div className="mt-1 text-sm font-bold text-white">💻 {DEV_NAME}</div>
+            <div className="mt-1 text-xs text-stone-400">Need a website or mobile app for your business?</div>
+            <a
+              href={DEV_WHATSAPP}
+              target="_blank"
+              className="mt-3 inline-block rounded-full bg-green-600 px-5 py-2 text-xs font-bold text-white transition hover:bg-green-500"
+            >
+              Chat for Website / App →
+            </a>
+          </div>
+        </div>
       </footer>
 
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-stone-200 bg-white/90 backdrop-blur-xl md:hidden" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
