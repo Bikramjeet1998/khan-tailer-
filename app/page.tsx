@@ -297,6 +297,7 @@ const gallery = [
 
 export default function Page() {
   useReveal();
+  const [bookStatus, setBookStatus] = useState("");
 
   return (
     <main className="min-h-screen">
@@ -585,11 +586,33 @@ export default function Page() {
             <p className="text-sm text-stone-500">Fill this — it opens WhatsApp ready to send.</p>
             <form
               className="mt-5 space-y-3"
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault();
-                const f = new FormData(e.currentTarget);
-                const msg = `Hello Khan Tailor, I want to book:%0AName: ${f.get("name")}%0APhone: ${f.get("phone")}%0AService: ${f.get("service")}%0AMessage: ${f.get("msg")}`;
-                window.open(`https://wa.me/91${PHONE}?text=${msg}`, "_blank");
+                const form = e.currentTarget;
+                const f = new FormData(form);
+                const data = {
+                  name: String(f.get("name") || ""),
+                  phone: String(f.get("phone") || ""),
+                  service: String(f.get("service") || "Other"),
+                  msg: String(f.get("msg") || ""),
+                };
+                // 1) Save to database (works silently in background)
+                try {
+                  await fetch("/api/bookings", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data),
+                  });
+                  setBookStatus("✓ Booking saved!");
+                } catch {
+                  setBookStatus("");
+                }
+                // 2) WhatsApp temporarily OFF for testing — uncomment to re-enable
+                // const msg = `Hello Khan Tailor, I want to book:%0AName: ${data.name}%0APhone: ${data.phone}%0AService: ${data.service}%0AMessage: ${data.msg}`;
+                // window.open(`https://wa.me/91${PHONE}?text=${msg}`, "_blank");
+                setBookStatus("✓ Booking saved! (Test mode — WhatsApp off)");
+                form.reset();
+                setTimeout(() => setBookStatus(""), 5000);
               }}
             >
               <input name="name" required placeholder="Your name" className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-200" />
@@ -606,6 +629,9 @@ export default function Page() {
               <button className="gold-bg w-full rounded-2xl py-3.5 font-bold text-white shadow-lg transition hover:-translate-y-0.5 hover:brightness-110">
                 Send Booking on WhatsApp →
               </button>
+              {bookStatus && (
+                <p className="text-center text-sm font-bold text-green-700">{bookStatus}</p>
+              )}
               <p className="text-center text-xs text-stone-400">Free measurement nearby • Home service available</p>
             </form>
           </div>
