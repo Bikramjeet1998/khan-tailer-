@@ -596,21 +596,26 @@ export default function Page() {
                   service: String(f.get("service") || "Other"),
                   msg: String(f.get("msg") || ""),
                 };
-                // 1) Save to database (works silently in background)
+                // 1) Save to database (shows REAL result, not fake success)
+                let saved = false;
                 try {
-                  await fetch("/api/bookings", {
+                  const res = await fetch("/api/bookings", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(data),
                   });
-                  setBookStatus("✓ Booking saved!");
+                  saved = res.ok;
                 } catch {
-                  setBookStatus("");
+                  saved = false;
                 }
                 // 2) WhatsApp temporarily OFF for testing — uncomment to re-enable
                 // const msg = `Hello Khan Tailor, I want to book:%0AName: ${data.name}%0APhone: ${data.phone}%0AService: ${data.service}%0AMessage: ${data.msg}`;
                 // window.open(`https://wa.me/91${PHONE}?text=${msg}`, "_blank");
-                setBookStatus("✓ Booking saved! (Test mode — WhatsApp off)");
+                setBookStatus(
+                  saved
+                    ? "✓ Booking saved! (Test mode — WhatsApp off)"
+                    : "⚠ Could NOT save — check database connection"
+                );
                 form.reset();
                 setTimeout(() => setBookStatus(""), 5000);
               }}
