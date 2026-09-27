@@ -129,7 +129,55 @@ Backend API (app/api/bookings/route.ts) ── validates ──▶ Supabase `boo
         └─► WhatsApp opens (unchanged, always works)
 ```
 
+---
+
+## Phase 1b — Track ALL WhatsApp Clicks in Database
+
+Goal: every time a visitor clicks ANY WhatsApp button/link on the site,
+a row is saved to the database — so you can see where enquiries come from.
+
+### New API route: `app/api/whatsapp-clicks/route.ts`
+- `POST /api/whatsapp-clicks` — saves `{ source, phone }` to a `whatsapp_clicks` table
+- `source` = which button was clicked (e.g. "navbar", "contact", "service-Bespoke Suits")
+- `phone` = your business phone number (so you know which number was clicked)
+
+### What changed in `app/page.tsx`
+- Added `trackWhatsAppClick(source)` helper — fires a POST to `/api/whatsapp-clicks`
+  (fire-and-forget with `keepalive`, never blocks the user)
+- Added `onClick` tracking to **every WhatsApp link** on the site:
+  - Navbar WhatsApp button → source: `"navbar"`
+  - Mobile menu WhatsApp → source: `"mobile-menu"`
+  - Collection "Ask on WhatsApp" → source: `"collection-header"`
+  - Each service "Book this →" → source: `"service-{name}"`
+  - Each bespoke CTA → source: `"bespoke-{cta}"`
+  - Contact section WhatsApp → source: `"contact"`
+  - Bottom mobile bar WhatsApp → source: `"mobile-bar"`
+  - Developer footer WhatsApp → source: `"dev-footer"`
+- Re-enabled WhatsApp in the booking form (was commented out for testing)
+
+### SQL to run in Supabase (new table)
+
+```sql
+create table whatsapp_clicks (
+  id bigint generated always as identity primary key,
+  source text not null,
+  phone text,
+  created_at timestamptz not null default now()
+);
+
+alter table whatsapp_clicks enable row level security;
+
+create policy "Allow public inserts"
+on whatsapp_clicks for insert to anon
+with check (true);
+```
+
+Run this in Supabase → SQL Editor → New query → paste → Run.
+
+---
+
 ## Next (Phase 2, when ready)
 - `/admin` page with password login (only you)
 - View all bookings, mark Done/Pending, delete spam
+- View WhatsApp click analytics (which buttons get the most taps)
 - Reads will use a server-side safe key (service_role kept on server only)

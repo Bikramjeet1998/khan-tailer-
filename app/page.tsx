@@ -14,6 +14,21 @@ const DEV_NAME = "Bikramjeet Singh";
 const DEV_PHONE = "6283974746";
 const DEV_WHATSAPP = `https://wa.me/91${DEV_PHONE}?text=${encodeURIComponent("Hi, I need a website / mobile app for my business. Please share details.")}`;
 
+// Fire-and-forget tracking: logs every WhatsApp click to the database.
+// keepalive ensures the request completes even if the page unloads.
+const trackWhatsAppClick = (source: string) => {
+  try {
+    fetch("/api/whatsapp-clicks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ source, phone: PHONE }),
+      keepalive: true,
+    }).catch(() => {});
+  } catch {
+    // Silently fail — never block the user from opening WhatsApp
+  }
+};
+
 const img = (id: string, w = 800) =>
   `https://images.unsplash.com/${id}?q=80&w=${w}&auto=format&fit=crop`;
 
@@ -116,6 +131,7 @@ function Navbar() {
             <a
               href={WHATSAPP}
               target="_blank"
+              onClick={() => trackWhatsAppClick("navbar")}
               className="hidden rounded-full border border-stone-300 bg-white/70 px-4 py-2 text-sm font-semibold text-stone-700 backdrop-blur transition hover:border-amber-500 sm:block"
             >
               WhatsApp
@@ -157,6 +173,7 @@ function Navbar() {
               <a
                 href={WHATSAPP}
                 target="_blank"
+                onClick={() => trackWhatsAppClick("mobile-menu")}
                 className="rounded-full bg-green-600 py-2.5 text-center text-sm font-bold text-white"
               >
                 WhatsApp
@@ -311,7 +328,7 @@ export default function Page() {
             <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-700">Shop by occasion</p>
             <h2 className="font-display mt-1 text-3xl font-bold text-stone-900 md:text-4xl">Popular Categories</h2>
           </div>
-          <a href={WHATSAPP} target="_blank" className="hidden text-sm font-bold text-amber-700 hover:underline md:block">
+          <a href={WHATSAPP} target="_blank" onClick={() => trackWhatsAppClick("collection-header")} className="hidden text-sm font-bold text-amber-700 hover:underline md:block">
             Ask on WhatsApp →
           </a>
         </div>
@@ -377,7 +394,7 @@ export default function Page() {
               <div className="p-5">
                 <h3 className="font-bold text-stone-900">{s.title}</h3>
                 <p className="mt-1 text-sm text-stone-500">{s.desc}</p>
-                <a href={WHATSAPP} target="_blank" className="mt-3 inline-block text-sm font-bold text-amber-700 transition group-hover:translate-x-1">
+                <a href={WHATSAPP} target="_blank" onClick={() => trackWhatsAppClick(`service-${s.title}`)} className="mt-3 inline-block text-sm font-bold text-amber-700 transition group-hover:translate-x-1">
                   Book this →
                 </a>
               </div>
@@ -429,7 +446,7 @@ export default function Page() {
                   </li>
                 ))}
               </ul>
-              <a href={WHATSAPP} target="_blank" className="gold-bg mt-6 inline-block rounded-full px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:-translate-y-0.5">
+              <a href={WHATSAPP} target="_blank" onClick={() => trackWhatsAppClick(`bespoke-${b.cta}`)} className="gold-bg mt-6 inline-block rounded-full px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:-translate-y-0.5">
                 {b.cta} →
               </a>
             </div>
@@ -576,7 +593,7 @@ export default function Page() {
               </div>
             </div>
             <div className="mt-5 flex gap-3">
-              <a href={WHATSAPP} target="_blank" className="flex-1 rounded-full bg-green-600 py-3 text-center font-bold transition hover:bg-green-700">WhatsApp</a>
+              <a href={WHATSAPP} target="_blank" onClick={() => trackWhatsAppClick("contact")} className="flex-1 rounded-full bg-green-600 py-3 text-center font-bold transition hover:bg-green-700">WhatsApp</a>
               <a href={MAPS} target="_blank" className="flex-1 rounded-full border border-white/20 py-3 text-center font-bold transition hover:border-amber-300 hover:text-amber-300">Direction</a>
             </div>
           </div>
@@ -608,13 +625,13 @@ export default function Page() {
                 } catch {
                   saved = false;
                 }
-                // 2) WhatsApp temporarily OFF for testing — uncomment to re-enable
-                // const msg = `Hello Khan Tailor, I want to book:%0AName: ${data.name}%0APhone: ${data.phone}%0AService: ${data.service}%0AMessage: ${data.msg}`;
-                // window.open(`https://wa.me/91${PHONE}?text=${msg}`, "_blank");
+                // 2) Open WhatsApp with pre-filled message (always works)
+                const msg = `Hello Khan Tailor, I want to book:%0AName: ${data.name}%0APhone: ${data.phone}%0AService: ${data.service}%0AMessage: ${data.msg}`;
+                window.open(`https://wa.me/91${PHONE}?text=${msg}`, "_blank");
                 setBookStatus(
                   saved
-                    ? "✓ Booking saved! (Test mode — WhatsApp off)"
-                    : "⚠ Could NOT save — check database connection"
+                    ? "✓ Booking saved! WhatsApp opened — hit Send there."
+                    : "⚠ Saved to WhatsApp but DB failed — we still got your enquiry!"
                 );
                 form.reset();
                 setTimeout(() => setBookStatus(""), 5000);
@@ -657,6 +674,7 @@ export default function Page() {
             <a
               href={DEV_WHATSAPP}
               target="_blank"
+              onClick={() => trackWhatsAppClick("dev-footer")}
               className="mt-3 inline-block rounded-full bg-green-600 px-5 py-2 text-xs font-bold text-white transition hover:bg-green-500"
             >
               Chat for Website / App →
@@ -668,7 +686,7 @@ export default function Page() {
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-stone-200 bg-white/90 backdrop-blur-xl md:hidden" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
         <div className="grid grid-cols-2 gap-2 p-2">
           <a href={`tel:+91${PHONE}`} className="rounded-full bg-stone-900 py-2.5 text-center text-sm font-bold text-amber-300">📞 Call Now</a>
-          <a href={WHATSAPP} className="rounded-full bg-green-600 py-2.5 text-center text-sm font-bold text-white">WhatsApp</a>
+          <a href={WHATSAPP} target="_blank" onClick={() => trackWhatsAppClick("mobile-bar")} className="rounded-full bg-green-600 py-2.5 text-center text-sm font-bold text-white">WhatsApp</a>
         </div>
       </div>
       <div className="h-14 md:hidden" />
