@@ -16,12 +16,12 @@ const DEV_WHATSAPP = `https://wa.me/91${DEV_PHONE}?text=${encodeURIComponent("Hi
 
 // Fire-and-forget tracking: logs every WhatsApp click to the database.
 // keepalive ensures the request completes even if the page unloads.
-const trackWhatsAppClick = (source: string) => {
+const trackWhatsAppClick = (source: string, phone: string = PHONE) => {
   try {
     fetch("/api/whatsapp-clicks", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ source, phone: PHONE }),
+      body: JSON.stringify({ source, phone }),
       keepalive: true,
     }).catch(() => {});
   } catch {
@@ -674,7 +674,7 @@ export default function Page() {
             <a
               href={DEV_WHATSAPP}
               target="_blank"
-              onClick={() => trackWhatsAppClick("dev-footer")}
+              onClick={() => trackWhatsAppClick("dev-footer", DEV_PHONE)}
               className="mt-3 inline-block rounded-full bg-green-600 px-5 py-2 text-xs font-bold text-white transition hover:bg-green-500"
             >
               Chat for Website / App →
