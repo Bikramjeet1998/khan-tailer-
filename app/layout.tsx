@@ -30,11 +30,11 @@ export const metadata: Metadata = {
   authors: [{ name: "Khan Tailor" }],
   creator: "Khan Tailor",
   publisher: "Khan Tailor",
-  // Site logo (save your logo image as public/logo.png).
+  // Site logo (public/logo-emblem.jpg).
   // Used as browser tab icon + Google search icon.
   icons: {
-    icon: "/logo.png",
-    apple: "/logo.png",
+    icon: "/logo-emblem.jpg",
+    apple: "/logo-emblem.jpg",
   },
   formatDetection: { telephone: true, address: true },
   alternates: { canonical: "/" },

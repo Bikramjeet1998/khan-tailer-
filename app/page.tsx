@@ -108,7 +108,7 @@ function Navbar() {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-2 sm:px-4 sm:py-3">
           <a href="#home" className="flex min-w-0 items-center gap-2">
             <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full bg-black ring-2 ring-amber-500/60 shadow sm:h-11 sm:w-11">
-              <Image src="/logo.png" alt="Khan Tailor logo" fill className="object-contain" />
+              <Image src="/logo-emblem.jpg" alt="Khan Tailor logo" fill className="object-cover" />
             </span>
             <span className="min-w-0 leading-tight">
               <span className="font-display block truncate text-lg font-bold tracking-wide text-stone-900 sm:text-xl">
@@ -698,11 +698,10 @@ export default function Page() {
       </section>
 
       <footer className="bg-stone-950 py-10 text-center text-sm text-stone-400">
-        <span className="relative mx-auto block h-20 w-20 overflow-hidden rounded-full bg-black ring-2 ring-amber-500/50">
-          <Image src="/logo.png" alt="Khan Tailor logo" fill className="object-contain" />
+        <span className="relative mx-auto block h-44 w-36 overflow-hidden rounded-2xl ring-2 ring-amber-500/40 shadow-2xl">
+          <Image src="/logo.jpeg" alt="Khan Tailor logo" fill className="object-cover object-top" />
         </span>
-        <div className="font-display mt-3 text-2xl font-bold text-white">Khan <span className="gold-text">Tailor</span></div>
-        <div className="mt-1 text-[11px] uppercase tracking-[0.25em] text-amber-500">Style • Comfort • Perfection</div>
+        <div className="mt-3 text-[11px] uppercase tracking-[0.25em] text-amber-500">Style • Comfort • Perfection</div>
         <div className="mt-3 px-4">{ADDRESS} • 📞 {PHONE_DISPLAY}</div>
         <div className="mt-2 text-xs text-stone-600">© {new Date().getFullYear()} Khan Tailor, Amritsar.</div>
 
