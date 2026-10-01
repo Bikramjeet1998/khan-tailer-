@@ -107,8 +107,8 @@ function Navbar() {
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-2 sm:px-4 sm:py-3">
           <a href="#home" className="flex min-w-0 items-center gap-2">
-            <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full ring-2 ring-amber-500/60 shadow sm:h-11 sm:w-11">
-              <Image src={P.suit2} alt="Khan Tailor" fill className="object-cover" />
+            <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full bg-black ring-2 ring-amber-500/60 shadow sm:h-11 sm:w-11">
+              <Image src="/logo.png" alt="Khan Tailor logo" fill className="object-cover" />
             </span>
             <span className="min-w-0 leading-tight">
               <span className="font-display block truncate text-lg font-bold tracking-wide text-stone-900 sm:text-xl">
@@ -292,7 +292,9 @@ const categories = [
   { title: "Shirts", sub: "Formal & casual", image: P.shirtsHang },
 ];
 
-const services = [
+// Fallback content (shown if database is empty/offline).
+// Live content comes from Supabase (editable in /admin) — see useSiteContent below.
+const DEFAULT_SERVICES = [
   { title: "Bespoke Suits", desc: "2-pc / 3-pc suits & blazers with sharp shoulders and clean drape.", image: P.suit2 },
   { title: "Sherwani & Indo-Western", desc: "Royal wedding wear with rich fabrics and regal finishing.", image: P.groom },
   { title: "Kurta Pajama & Pathani", desc: "Breathable festive & daily kurtas in cotton, linen & silk.", image: P.indianMen },
@@ -301,7 +303,7 @@ const services = [
   { title: "Alteration & Repair", desc: "Same-day fitting correction, tapering, zip & finishing.", image: P.sewing },
 ];
 
-const gallery = [
+const DEFAULT_GALLERY = [
   { src: P.suitMain, label: "Business Suit", h: "h-64 md:h-80" },
   { src: P.wedding, label: "Wedding Look", h: "h-64 md:h-80" },
   { src: P.indianMen, label: "Kurta Style", h: "h-64 md:h-80" },
@@ -312,9 +314,48 @@ const gallery = [
   { src: P.businessman, label: "Office Fit", h: "h-64 md:h-72" },
 ];
 
+const DEFAULT_TESTIMONIALS = [
+  { name: "Rahul Sharma", role: "Wedding Client", text: "My wedding sherwani fit was absolutely perfect. Fabric quality excellent, finishing premium. Got so many compliments!", face: P.face1 },
+  { name: "Amit Verma", role: "Regular Customer", text: "Trusted tailor for years — suits to shirts, always precise stitching and on-time delivery. Highly recommended.", face: P.face2 },
+  { name: "Simran Kaur", role: "Family Function", text: "Ordered kurtas for whole family. Home measurement was so easy, fitting perfect for everyone. Very professional.", face: P.face3 },
+];
+
+// Loads live content from /api/content (managed in /admin).
+// Falls back to DEFAULT_* so the site never looks broken.
+function useSiteContent() {
+  const [services, setServices] = useState(DEFAULT_SERVICES);
+  const [gallery, setGallery] = useState(DEFAULT_GALLERY);
+  const [testimonials, setTestimonials] = useState(DEFAULT_TESTIMONIALS);
+  useEffect(() => {
+    fetch("/api/content")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!d) return;
+        if (Array.isArray(d.services) && d.services.length) {
+          setServices(d.services.map((s: { title: string; description: string; image_url: string }) => ({
+            title: s.title, desc: s.description, image: s.image_url,
+          })));
+        }
+        if (Array.isArray(d.gallery) && d.gallery.length) {
+          setGallery(d.gallery.map((g: { image_url: string; label: string }, i: number) => ({
+            src: g.image_url, label: g.label, h: i < 3 ? "h-64 md:h-80" : "h-64 md:h-72",
+          })));
+        }
+        if (Array.isArray(d.testimonials) && d.testimonials.length) {
+          setTestimonials(d.testimonials.map((t: { name: string; role: string; text: string; photo_url: string }) => ({
+            name: t.name, role: t.role, text: t.text, face: t.photo_url,
+          })));
+        }
+      })
+      .catch(() => {});
+  }, []);
+  return { services, gallery, testimonials };
+}
+
 export default function Page() {
   useReveal();
   const [bookStatus, setBookStatus] = useState("");
+  const { services, gallery, testimonials } = useSiteContent();
 
   return (
     <main className="min-h-screen">
@@ -500,11 +541,7 @@ export default function Page() {
       <section className="mx-auto max-w-6xl px-4 pb-14">
         <h2 className="reveal font-display text-center text-3xl font-bold text-stone-900">What Customers Say</h2>
         <div className="mt-7 grid gap-4 md:grid-cols-3">
-          {[
-            { name: "Rahul Sharma", role: "Wedding Client", text: "My wedding sherwani fit was absolutely perfect. Fabric quality excellent, finishing premium. Got so many compliments!", face: P.face1 },
-            { name: "Amit Verma", role: "Regular Customer", text: "Trusted tailor for years — suits to shirts, always precise stitching and on-time delivery. Highly recommended.", face: P.face2 },
-            { name: "Simran Kaur", role: "Family Function", text: "Ordered kurtas for whole family. Home measurement was so easy, fitting perfect for everyone. Very professional.", face: P.face3 },
-          ].map((t, i) => (
+          {testimonials.map((t, i) => (
             <div key={t.name} className="reveal glass rounded-3xl p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl" style={{ transitionDelay: `${i * 90}ms` }}>
               <div className="text-amber-500">★★★★★</div>
               <p className="mt-2 text-sm leading-relaxed text-stone-600">&ldquo;{t.text}&rdquo;</p>
@@ -661,7 +698,10 @@ export default function Page() {
       </section>
 
       <footer className="bg-stone-950 py-10 text-center text-sm text-stone-400">
-        <div className="font-display text-2xl font-bold text-white">Khan <span className="gold-text">Tailor</span></div>
+        <span className="relative mx-auto block h-20 w-20 overflow-hidden rounded-full bg-black ring-2 ring-amber-500/50">
+          <Image src="/logo.png" alt="Khan Tailor logo" fill className="object-cover" />
+        </span>
+        <div className="font-display mt-3 text-2xl font-bold text-white">Khan <span className="gold-text">Tailor</span></div>
         <div className="mt-1 text-[11px] uppercase tracking-[0.25em] text-amber-500">Style • Comfort • Perfection</div>
         <div className="mt-3 px-4">{ADDRESS} • 📞 {PHONE_DISPLAY}</div>
         <div className="mt-2 text-xs text-stone-600">© {new Date().getFullYear()} Khan Tailor, Amritsar.</div>

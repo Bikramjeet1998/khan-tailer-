@@ -30,6 +30,12 @@ export const metadata: Metadata = {
   authors: [{ name: "Khan Tailor" }],
   creator: "Khan Tailor",
   publisher: "Khan Tailor",
+  // Site logo (save your logo image as public/logo.png).
+  // Used as browser tab icon + Google search icon.
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
   formatDetection: { telephone: true, address: true },
   alternates: { canonical: "/" },
   openGraph: {
@@ -170,6 +176,25 @@ function FaqSchema() {
   );
 }
 
+// Tells Google the site's name ("Khan Tailor") so search results
+// show it instead of a generic name like "Vercel".
+function WebsiteSchema() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${SITE_URL}/#website`,
+    url: SITE_URL,
+    name: "Khan Tailor",
+    alternateName: "Khan Tailor Amritsar",
+  };
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -181,6 +206,7 @@ export default function RootLayout({
         <link rel="canonical" href={SITE_URL} />
       </head>
       <body className="antialiased">
+        <WebsiteSchema />
         <LocalBusinessSchema />
         <FaqSchema />
         {children}
